@@ -33,4 +33,4 @@
 
 **Проект опубликован на GitHub Pages**
 
-* [Ссылка на опубликованный проект](https://evgeniy-dvoeglazov.github.io/mesto-react/)
+[Ссылка на опубликованный проект](https://evgeniy-dvoeglazov.github.io/mesto-react/)

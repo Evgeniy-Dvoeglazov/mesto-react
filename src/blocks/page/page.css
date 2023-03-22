@@ -1,8 +1,5 @@
 .page {
-  margin: 0 auto;
   display: grid;
-  min-width: 320px;
-  margin: 0 auto;
   grid-template-columns: 50px 1fr 50px;
   grid-template-rows: 119px 1fr 145px;
   grid-template-areas:

@@ -80,6 +80,7 @@ function App() {
         title="Редактировать профиль"
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
+        buttonText="Сохранить"
         children={
           <>
             <input className="popup__input" id="name-input" type="text" name="name" placeholder="Имя" required minLength="2"
@@ -88,7 +89,6 @@ function App() {
             <input className="popup__input" id="info-input" type="text" name="info" placeholder="О себе" required
               minLength="2" maxLength="200" />
             <span className="popup__error info-input-error"></span>
-            <button className="popup__button" type="submit" id="popupEdit__button">Сохранить</button>
           </>
         }
       />
@@ -97,6 +97,7 @@ function App() {
         title="Новое место"
         isOpen={isAddPlacePopupOpen}
         onClose={closeAllPopups}
+        buttonText="Создать"
         children={
           <>
             <input className="popup__input" id="placename-input" type="text" name="name" placeholder="Название" required
@@ -105,7 +106,6 @@ function App() {
             <input className="popup__input" id="placesrc-input" type="url" name="link" placeholder="Ссылка на картинку"
               required />
             <span className="popup__error placesrc-input-error"></span>
-            <button className="popup__button" type="submit" id="popupAdd__button">Создать</button>
           </>
         }
       />
@@ -114,12 +114,12 @@ function App() {
         title="Обновить аватар"
         isOpen={isEditAvatarPopupOpen}
         onClose={closeAllPopups}
+        buttonText="Сохранить"
         children={
           <>
             <input className="popup__input" id="avatarsrc-input" type="url" name="link" placeholder="Ссылка на фотографию"
               required />
             <span className="popup__error avatarsrc-input-error"></span>
-            <button className="popup__button" type="submit" id="popupChangeAvatar__button">Сохранить</button>
           </>
         }
       />

@@ -4,6 +4,7 @@ import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import EditProfilePopup from './EditProfilePopup';
 import { api } from '../utils/Api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
@@ -123,22 +124,9 @@ function App() {
           onCardDelete={handleCardDelete}
         />
         <Footer />
-        <PopupWithForm
-          name="edit"
-          title="Редактировать профиль"
+        <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
-          buttonText="Сохранить"
-          children={
-            <>
-              <input className="popup__input" id="name-input" type="text" name="name" placeholder="Имя" required minLength="2"
-                maxLength="40" />
-              <span className="popup__error name-input-error"></span>
-              <input className="popup__input" id="info-input" type="text" name="info" placeholder="О себе" required
-                minLength="2" maxLength="200" />
-              <span className="popup__error info-input-error"></span>
-            </>
-          }
         />
         <PopupWithForm
           name="add"

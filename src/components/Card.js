@@ -1,7 +1,25 @@
+import React from 'react';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+
 function Card(props) {
+
+  const currentUser = React.useContext(CurrentUserContext);
+  const isOwn = props.card.owner._id === currentUser._id;
+  const isLiked = props.card.likes.some(i => i._id === currentUser._id);
+  const cardLikeButtonClassName = (
+    `element__btn-like ${isLiked && 'element__btn-like_active'}`
+  );
 
   function handleClick() {
     props.onCardClick(props.card);
+  }
+
+  function handleDeleteClick() {
+    props.onCardDelete(props.card);
+  }
+
+  function handleCardLike() {
+    props.onCardLike(props.card);
   }
 
   return (
@@ -11,11 +29,11 @@ function Card(props) {
       <div className="element__description">
         <h2 className="element__text">{props.card.name}</h2>
         <div className="element__like">
-          <button className="element__btn-like" type="button" aria-label="Кнопка поставить лайк"></button>
+          <button className={cardLikeButtonClassName} type="button" aria-label="Кнопка поставить лайк" onClick={handleCardLike}></button>
           <p className="element__like-quantity">{props.card.likes.length}</p>
         </div>
       </div>
-      <button className="element__delete-btn" type="button" aria-label="Кнопка удаления карточки места"></button>
+      {isOwn && <button className="element__delete-btn" onClick={handleDeleteClick} type="button" aria-label="Кнопка удаления карточки места" />}
     </li>
   );
 }

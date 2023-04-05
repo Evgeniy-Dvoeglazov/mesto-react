@@ -1,5 +1,5 @@
 .element__delete-btn {
-  display: none;
+  display: flex;
   background-image: url(../../../images/basket.png);
   background-color: transparent;
   border: none;

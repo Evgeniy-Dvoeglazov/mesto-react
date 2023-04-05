@@ -79,28 +79,25 @@ class Api {
       });
   }
 
-  // Добавляем карточке лайк
+  // Добавляем и удаляем лайк
 
-  addLike(cardId) {
-    return fetch(`${this._url}/cards/${cardId}/likes`, {
-      method: 'PUT',
-      headers: this._headers,
-    })
-      .then((res) => {
-        return this._checkResponse(res);
-      });
-  }
-
-  // Удаляем лайк
-
-  removeLike(cardId) {
-    return fetch(`${this._url}/cards/${cardId}/likes`, {
-      method: 'DELETE',
-      headers: this._headers,
-    })
-      .then((res) => {
-        return this._checkResponse(res);
-      });
+  changeLikeCardStatus(cardId, likeStatus) {
+    if (likeStatus) {
+      return fetch(`${this._url}/cards/${cardId}/likes`, {
+        method: 'PUT',
+        headers: this._headers,
+      })
+        .then((res) => {
+          return this._checkResponse(res);
+        });
+    } else
+      return fetch(`${this._url}/cards/${cardId}/likes`, {
+        method: 'DELETE',
+        headers: this._headers,
+      })
+        .then((res) => {
+          return this._checkResponse(res);
+        });
   }
 
   // Отправляем ссылку на смену аватара

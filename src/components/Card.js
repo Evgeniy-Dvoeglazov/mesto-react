@@ -18,7 +18,7 @@ function Card(props) {
     props.onCardDelete(props.card);
   }
 
-  function handleCardLike() {
+  function handleLikeClick() {
     props.onCardLike(props.card);
   }
 
@@ -29,7 +29,7 @@ function Card(props) {
       <div className="element__description">
         <h2 className="element__text">{props.card.name}</h2>
         <div className="element__like">
-          <button className={cardLikeButtonClassName} type="button" aria-label="Кнопка поставить лайк" onClick={handleCardLike}></button>
+          <button className={cardLikeButtonClassName} type="button" aria-label="Кнопка поставить лайк" onClick={handleLikeClick}></button>
           <p className="element__like-quantity">{props.card.likes.length}</p>
         </div>
       </div>

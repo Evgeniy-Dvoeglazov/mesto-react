@@ -2,11 +2,15 @@ import React from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup';
 import { api } from '../utils/Api';
+import { validationConfig } from '../utils/utils.js'
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import AddPlacePopup from './AddPlacePopup';
+import DeletePlacePopup from './DeletePlacePopup';
+import FormValidator from '../utils/FormValidator';
 
 function App() {
 
@@ -14,9 +18,27 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
+  const [isDeletePlacePopupOpen, setIsDeletePlacePopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+
+//   const formValidators = {}
+
+// // Включение валидации
+// const enableValidation = (config) => {
+//   const formList = Array.from(document.querySelectorAll(config.formSelector))
+//   formList.forEach((formElement) => {
+//     const validator = new FormValidator(config, formElement);
+//     // получаем данные из атрибута `name` у формы
+//     const formName = formElement.getAttribute('name');
+//     formValidators[formName] = validator;
+//     validator.enableValidation();
+//   });
+// };
+
+// enableValidation(validationConfig);
 
   React.useEffect(() => {
     api.getUserInfo()
@@ -29,7 +51,7 @@ function App() {
   }, []);
 
   React.useEffect(() => {
-    api.getInitialCards()
+    api.getCardList()
       .then((res) => {
         setCards(res);
       })
@@ -60,6 +82,7 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsImagePopupOpen(false);
+    setIsDeletePlacePopupOpen(false);
   }
 
   function handleCardLike(card) {
@@ -74,11 +97,73 @@ function App() {
       });
   }
 
+  function handleCardDeleteClick(card) {
+    setIsDeletePlacePopupOpen(true);
+    setSelectedCard(card);
+  }
+
   function handleCardDelete(card) {
+    setIsLoading(true);
+
     api.removeCard(card._id)
       .then(() => {
         setCards((state) => state.filter((c) => c._id !== card._id));
+        closeAllPopups();
       })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
+
+  function handleUpdateUser({ name, about }) {
+    setIsLoading(true);
+
+    api.setUserInfo({ name, about })
+      .then((res) => {
+        setCurrentUser(res);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
+
+  function handleUpdateAvatar({ avatar }) {
+    setIsLoading(true);
+
+    api.changeAvatar({ avatar })
+      .then((res) => {
+        setCurrentUser(res);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
+
+  function handleAddPlaceSubmit({ name, link }) {
+    setIsLoading(true);
+
+    api.addCard({ name, link })
+      .then((newCard) => {
+        setCards([newCard, ...cards]);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
   React.useEffect(() => {
@@ -121,43 +206,26 @@ function App() {
           onCardLike={handleCardLike}
           setCards={setCards}
           cards={cards}
-          onCardDelete={handleCardDelete}
+          onCardDelete={handleCardDeleteClick}
         />
         <Footer />
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
+          onUpdateUser={handleUpdateUser}
+          isLoading={isLoading}
         />
-        <PopupWithForm
-          name="add"
-          title="Новое место"
+        <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
-          buttonText="Создать"
-          children={
-            <>
-              <input className="popup__input" id="placename-input" type="text" name="name" placeholder="Название" required
-                minLength="2" maxLength="30" />
-              <span className="popup__error placename-input-error"></span>
-              <input className="popup__input" id="placesrc-input" type="url" name="link" placeholder="Ссылка на картинку"
-                required />
-              <span className="popup__error placesrc-input-error"></span>
-            </>
-          }
+          onAddPlace={handleAddPlaceSubmit}
+          isLoading={isLoading}
         />
-        <PopupWithForm
-          name="changeAvatar"
-          title="Обновить аватар"
+        <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
-          buttonText="Сохранить"
-          children={
-            <>
-              <input className="popup__input" id="avatarsrc-input" type="url" name="link" placeholder="Ссылка на фотографию"
-                required />
-              <span className="popup__error avatarsrc-input-error"></span>
-            </>
-          }
+          onUpdateAvatar={handleUpdateAvatar}
+          isLoading={isLoading}
         />
         <ImagePopup
           isOpen={isImagePopupOpen}
@@ -165,16 +233,13 @@ function App() {
           onClose={closeAllPopups}
         />
 
-        <div className="popup" id="popup_delete">
-          <div className="popup__container">
-            <h2 className="popup__title-delete">Вы уверены?</h2>
-            <form className="popup__form" id="popup__form_delete" name="deleteForm">
-              <button className="popup__button" type="submit" id="popupDelete__button">Да</button>
-            </form>
-            <button className="popup__close-btn" id="popup__close-btn_delete" type="button"
-              aria-label="Кнопка закрытия формы"></button>
-          </div>
-        </div>
+        <DeletePlacePopup
+          isOpen={isDeletePlacePopupOpen}
+          onClose={closeAllPopups}
+          onCardDelete={handleCardDelete}
+          card={selectedCard}
+          isLoading={isLoading}
+        />
       </div>
     </CurrentUserContext.Provider>
   );

@@ -26,7 +26,7 @@ class Api {
 
   // Получаем массив карточек с сервера
 
-  getInitialCards() {
+  getCardList() {
     return fetch(`${this._url}/cards`, {
       headers: this._headers
     })
@@ -37,13 +37,13 @@ class Api {
 
   // Изменяем данные о пользлвателе на сервере
 
-  setUserInfo(getInputValue) {
+  setUserInfo({name, about}) {
     return fetch(`${this._url}/users/me`, {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({
-        name: getInputValue.name,
-        about: getInputValue.info
+        name: name,
+        about: about
       })
     })
       .then((res) => {
@@ -53,13 +53,13 @@ class Api {
 
   // Передаем данные новой карточки
 
-  addCard(userCard) {
+  addCard({name, link}) {
     return fetch(`${this._url}/cards`, {
       method: 'POST',
       headers: this._headers,
       body: JSON.stringify({
-        name: userCard.name,
-        link: userCard.link
+        name: name,
+        link: link
       })
     })
       .then((res) => {
@@ -72,7 +72,7 @@ class Api {
   removeCard(cardId) {
     return fetch(`${this._url}/cards/${cardId}`, {
       method: 'DELETE',
-      headers: this._headers,
+      headers: this._headers
     })
       .then((res) => {
         return this._checkResponse(res);
@@ -85,7 +85,7 @@ class Api {
     if (likeStatus) {
       return fetch(`${this._url}/cards/${cardId}/likes`, {
         method: 'PUT',
-        headers: this._headers,
+        headers: this._headers
       })
         .then((res) => {
           return this._checkResponse(res);
@@ -93,7 +93,7 @@ class Api {
     } else
       return fetch(`${this._url}/cards/${cardId}/likes`, {
         method: 'DELETE',
-        headers: this._headers,
+        headers: this._headers
       })
         .then((res) => {
           return this._checkResponse(res);
@@ -102,12 +102,12 @@ class Api {
 
   // Отправляем ссылку на смену аватара
 
-  changeAvatar(getInputValue) {
+  changeAvatar({avatar}) {
     return fetch(`${this._url}/users/me/avatar`, {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({
-        avatar: getInputValue.link
+        avatar: avatar
       })
     })
       .then((res) => {

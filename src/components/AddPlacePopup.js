@@ -1,19 +1,26 @@
 import PopupWithForm from './PopupWithForm';
 import React from 'react';
+import { useForm } from 'react-hook-form';
 
 function AddPlacePopup(props) {
 
-  const nameRef = React.useRef();
-  const linkRef = React.useRef();
+  const { register, formState: { errors, isValid }, getValues, reset } = useForm({ mode: 'onChange', criteriaMode: 'all' });
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  const errorClassname = (name) => `popup__error ${errors[name] ? 'popup__error_visible' : ''}`;
+
+  function handleSubmit(evt) {
+    evt.preventDefault();
+
     props.onAddPlace({
-      name: nameRef.current.value,
-      link: linkRef.current.value
+      name: getValues('name'),
+      link: getValues('link')
     });
-    nameRef.current.value = '';
-    linkRef.current.value = '';
+    reset();
+  }
+
+  const onClosePopup = () => {
+    props.onClose();
+    reset();
   }
 
   return (
@@ -21,18 +28,37 @@ function AddPlacePopup(props) {
       name="add"
       title="Новое место"
       isOpen={props.isOpen}
-      onClose={props.onClose}
+      onClose={onClosePopup}
       onSubmit={handleSubmit}
       isLoading={props.isLoading}
       buttonText="Создать"
+      isValid={isValid}
       children={
         <>
-          <input className="popup__input" ref={nameRef} id="placename-input" type="text" name="name" placeholder="Название" required
-            minLength="2" maxLength="30" />
-          <span className="popup__error placename-input-error"></span>
-          <input className="popup__input" ref={linkRef} id="placesrc-input" type="url" name="link" placeholder="Ссылка на картинку"
-            required />
-          <span className="popup__error placesrc-input-error"></span>
+          <input className="popup__input" id="placename-input" type="text" placeholder="Название"
+            {...register('name', {
+              required: 'Заполните это поле.',
+              minLength: {
+                value: 2,
+                message: 'Текст должен быть не короче 2 символов.'
+              },
+              maxLength: {
+                value: 30,
+                message: 'Текст должен быть не длиннее 30 символов.'
+              }
+            })}
+          />
+          {errors.name && <span className={errorClassname('name')}>{errors.name.message}</span>}
+          <input className="popup__input" id="placesrc-input" type="url" placeholder="Ссылка на картинку"
+            {...register('link', {
+              required: 'Заполните это поле.',
+              pattern: {
+                value: /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/,
+                message: 'Введите ссылку'
+              }
+            })}
+          />
+          {errors.link && <span className={errorClassname('link')}>{errors.link.message}</span>}
         </>
       }
     />

@@ -1,7 +1,7 @@
 function DeletePlacePopup(props) {
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit(evt) {
+    evt.preventDefault();
     props.onCardDelete(props.card);
   }
 

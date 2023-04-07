@@ -37,7 +37,7 @@ class Api {
 
   // Изменяем данные о пользлвателе на сервере
 
-  setUserInfo({name, about}) {
+  setUserInfo({ name, about }) {
     return fetch(`${this._url}/users/me`, {
       method: 'PATCH',
       headers: this._headers,
@@ -53,7 +53,7 @@ class Api {
 
   // Передаем данные новой карточки
 
-  addCard({name, link}) {
+  addCard({ name, link }) {
     return fetch(`${this._url}/cards`, {
       method: 'POST',
       headers: this._headers,
@@ -102,7 +102,7 @@ class Api {
 
   // Отправляем ссылку на смену аватара
 
-  changeAvatar({avatar}) {
+  changeAvatar({ avatar }) {
     return fetch(`${this._url}/users/me/avatar`, {
       method: 'PATCH',
       headers: this._headers,

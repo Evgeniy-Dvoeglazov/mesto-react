@@ -6,11 +6,9 @@ import ImagePopup from './ImagePopup';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import { api } from '../utils/Api';
-import { validationConfig } from '../utils/utils.js'
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import AddPlacePopup from './AddPlacePopup';
 import DeletePlacePopup from './DeletePlacePopup';
-import FormValidator from '../utils/FormValidator';
 
 function App() {
 
@@ -23,22 +21,6 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
-
-//   const formValidators = {}
-
-// // Включение валидации
-// const enableValidation = (config) => {
-//   const formList = Array.from(document.querySelectorAll(config.formSelector))
-//   formList.forEach((formElement) => {
-//     const validator = new FormValidator(config, formElement);
-//     // получаем данные из атрибута `name` у формы
-//     const formName = formElement.getAttribute('name');
-//     formValidators[formName] = validator;
-//     validator.enableValidation();
-//   });
-// };
-
-// enableValidation(validationConfig);
 
   React.useEffect(() => {
     api.getUserInfo()
@@ -168,7 +150,7 @@ function App() {
 
   React.useEffect(() => {
     function ClosePopupOnEsc(evt) {
-      if ((evt.key === 'Escape') && (isEditProfilePopupOpen || isAddPlacePopupOpen || isEditAvatarPopupOpen || isImagePopupOpen)) {
+      if ((evt.key === 'Escape') && (isEditProfilePopupOpen || isAddPlacePopupOpen || isEditAvatarPopupOpen || isImagePopupOpen || isDeletePlacePopupOpen)) {
         closeAllPopups();
       }
     }

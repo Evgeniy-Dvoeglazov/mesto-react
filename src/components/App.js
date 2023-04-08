@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -12,17 +12,17 @@ import DeletePlacePopup from './DeletePlacePopup';
 
 function App() {
 
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-  const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
-  const [isDeletePlacePopupOpen, setIsDeletePlacePopupOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState({});
-  const [currentUser, setCurrentUser] = React.useState({});
-  const [cards, setCards] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [isDeletePlacePopupOpen, setIsDeletePlacePopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
+  const [currentUser, setCurrentUser] = useState({});
+  const [cards, setCards] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     api.getUserInfo()
       .then((res) => {
         setCurrentUser(res);
@@ -32,7 +32,7 @@ function App() {
       });
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     api.getCardList()
       .then((res) => {
         setCards(res);
@@ -147,34 +147,6 @@ function App() {
         setIsLoading(false);
       });
   }
-
-  React.useEffect(() => {
-    function ClosePopupOnEsc(evt) {
-      if ((evt.key === 'Escape') && (isEditProfilePopupOpen || isAddPlacePopupOpen || isEditAvatarPopupOpen || isImagePopupOpen || isDeletePlacePopupOpen)) {
-        closeAllPopups();
-      }
-    }
-
-    document.addEventListener('keydown', ClosePopupOnEsc);
-
-    return () => {
-      document.removeEventListener('keydown', ClosePopupOnEsc);
-    };
-  });
-
-  React.useEffect(() => {
-    function ClosePopupOnOverlay(evt) {
-      if (evt.target.classList.contains('popup_opened')) {
-        closeAllPopups();
-      }
-    }
-
-    document.addEventListener('mousedown', ClosePopupOnOverlay);
-
-    return () => {
-      document.removeEventListener('mousedown', ClosePopupOnOverlay);
-    };
-  });
 
   return (
     <CurrentUserContext.Provider value={currentUser}>

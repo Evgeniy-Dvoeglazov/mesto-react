@@ -1,11 +1,11 @@
-import React from 'react';
+import { useContext, useEffect } from 'react';
 import PopupWithForm from './PopupWithForm';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { useFormValidation } from '../utils/useFormValidation';
 
 function EditProfilePopup(props) {
 
-  const currentUser = React.useContext(CurrentUserContext);
+  const currentUser = useContext(CurrentUserContext);
   const { values, errors, isValid, handleChange, setValue, reset, formRef } = useFormValidation();
 
   const errorClassname = (name) => `popup__error ${errors[name] ? 'popup__error_visible' : ''}`;
@@ -23,7 +23,7 @@ function EditProfilePopup(props) {
     });
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     setValue('userName', currentUser.name)
     setValue('userDescription', currentUser.about)
   }, [currentUser]);

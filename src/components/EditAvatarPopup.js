@@ -1,14 +1,9 @@
-import React from 'react';
 import PopupWithForm from './PopupWithForm';
 import { useForm } from 'react-hook-form';
 
 function EditAvatarPopup(props) {
 
-  const linkRef = React.useRef();
-
-  const { register, formState: { errors, isValid }, reset } = useForm({ mode: 'onChange', criteriaMode: 'all' });
-
-  const { ref } = register('link');
+  const { register, formState: { errors, isValid }, getValues, reset } = useForm({ mode: 'onChange', criteriaMode: 'all' });
 
   const errorClassname = (name) => `popup__error ${errors[name] ? 'popup__error_visible' : ''}`;
 
@@ -16,7 +11,7 @@ function EditAvatarPopup(props) {
     e.preventDefault();
 
     props.onUpdateAvatar({
-      avatar: linkRef.current.value
+      avatar: getValues('link')
     });
     reset();
   }
@@ -45,10 +40,7 @@ function EditAvatarPopup(props) {
                 value: /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/,
                 message: 'Введите ссылку'
               }
-            })} ref={(evt) => {
-              ref(evt)
-              linkRef.current = evt
-            }}
+            })}
           />
           {errors.link && <span className={errorClassname('link')}>{errors.link.message}</span>}
         </>

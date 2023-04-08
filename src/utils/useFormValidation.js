@@ -1,12 +1,12 @@
-import React from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 export function useFormValidation(initialValues = {}) {
-  const [values, setValues] = React.useState(initialValues);
-  const [errors, setErrors] = React.useState({});
-  const [isValid, setIsValid] = React.useState(false);
-  const formRef = React.useRef();
+  const [values, setValues] = useState(initialValues);
+  const [errors, setErrors] = useState({});
+  const [isValid, setIsValid] = useState(false);
+  const formRef = useRef();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setIsValid(formRef.current.checkValidity());
   });
 

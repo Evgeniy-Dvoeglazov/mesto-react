@@ -1,4 +1,36 @@
+import { useEffect } from 'react';
+
 function DeletePlacePopup(props) {
+
+  useEffect(() => {
+    function ClosePopupOnEsc(evt) {
+      if ((evt.key === 'Escape') && props.isOpen) {
+        props.onClose();
+      }
+    }
+    if (props.isOpen) {
+      document.addEventListener('keydown', ClosePopupOnEsc);
+
+      return () => {
+        document.removeEventListener('keydown', ClosePopupOnEsc);
+      };
+    }
+  });
+
+  useEffect(() => {
+    function ClosePopupOnOverlay(evt) {
+      if (evt.target.classList.contains('popup_opened')) {
+        props.onClose();
+      }
+    }
+    if (props.isOpen) {
+      document.addEventListener('mousedown', ClosePopupOnOverlay);
+
+      return () => {
+        document.removeEventListener('mousedown', ClosePopupOnOverlay);
+      };
+    }
+  });
 
   function handleSubmit(evt) {
     evt.preventDefault();
